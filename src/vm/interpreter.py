@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 from .memory import Memory
 from .decoder import Decoder, DecodedInstruction
+<<<<<<< HEAD
 from .alu import ALU  # Импортируем АЛУ
 
 class VirtualMachine:
@@ -15,11 +16,22 @@ class VirtualMachine:
         """
         Инициализация виртуальной машины.
 
+=======
+
+class VirtualMachine:
+    """Виртуальная машина УВМ."""
+    
+    def __init__(self, data_memory_size: int = 65536, num_registers: int = 32):
+        """
+        Инициализация виртуальной машины.
+        
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
         Args:
             data_memory_size: размер памяти данных
             num_registers: количество регистров
         """
         self.memory = Memory(data_memory_size, num_registers)
+<<<<<<< HEAD
         self.alu = ALU()  # Создаем экземпляр АЛУ
         self.ip = 0  # Instruction Pointer
         self.running = False
@@ -34,31 +46,61 @@ class VirtualMachine:
         """
         Загружает программу из бинарного файла.
 
+=======
+        self.ip = 0  # Instruction Pointer
+        self.running = False
+        self.max_instructions = 100000  # Защита от бесконечного цикла
+        
+        # Флаги для отладки
+        self.debug = False
+        self.step_by_step = False
+    
+    def load_program_from_file(self, file_path: str):
+        """
+        Загружает программу из бинарного файла.
+        
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
         Args:
             file_path: путь к бинарному файлу
         """
         try:
             with open(file_path, 'rb') as f:
                 program_data = f.read()
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
             self.memory.load_program(program_data)
             self.ip = 0
             print(f"Программа загружена из {file_path}")
             print(f"Размер программы: {len(program_data)} байт")
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
         except FileNotFoundError:
             print(f"Ошибка: файл не найден: {file_path}")
             sys.exit(1)
         except Exception as e:
             print(f"Ошибка загрузки программы: {e}")
             sys.exit(1)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
     def execute_load_const(self, const: int, reg_addr: int):
         """Выполняет команду LOAD_CONST."""
         self.memory.set_register(reg_addr, const)
         if self.debug:
             print(f"  LOAD_CONST: R{reg_addr} = {const}")
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
     def execute_read_mem(self, mem_addr: int, reg_addr: int):
         """Выполняет команду READ_MEM."""
         value = self.memory.read_data(mem_addr)
@@ -81,6 +123,7 @@ class VirtualMachine:
             print(f"  WRITE_MEM: memory[{address}] = R{reg_addr_src} = {value}")
 
     def execute_abs(self, offset: int, base_reg: int, src_reg: int):
+<<<<<<< HEAD
         """Выполняет команду ABS с использованием АЛУ."""
         # Получаем значение из регистра-источника
         value = self.memory.get_register(src_reg)
@@ -91,12 +134,18 @@ class VirtualMachine:
         # Вычисляем адрес назначения
         base_address = self.memory.get_register(base_reg)
         address = base_address + offset
+=======
+        """Выполняет команду ABS."""
+        value = abs(self.memory.get_register(src_reg))
+        address = self.memory.get_register(base_reg) + offset
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
 
         # Проверяем границы
         if address < 0:
             raise ValueError(f"Адрес памяти не может быть отрицательным: {address}")
 
         if 0 <= address < self.memory.data_size:
+<<<<<<< HEAD
             self.memory.write_data(address, abs_value)
             if self.debug:
                 print(f"  ABS: memory[{address}] = abs(R{src_reg}) = {abs_value}")
@@ -105,6 +154,14 @@ class VirtualMachine:
         else:
             raise ValueError(f"Адрес {address} вне диапазона памяти [0, {self.memory.data_size-1}]")
 
+=======
+            self.memory.write_data(address, value)
+            if self.debug:
+                print(f"  ABS: memory[{address}] = abs(R{src_reg}) = {value}")
+        else:
+            raise ValueError(f"Адрес {address} вне диапазона памяти [0, {self.memory.data_size - 1}]")
+    
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
     def execute_instruction(self, instr: DecodedInstruction):
         """Выполняет одну инструкцию."""
         if instr.opcode == 158:  # LOAD_CONST
@@ -117,6 +174,7 @@ class VirtualMachine:
             self.execute_abs(instr.args[0], instr.args[1], instr.args[2])
         else:
             raise ValueError(f"Неизвестный код операции: {instr.opcode}")
+<<<<<<< HEAD
 
         self.memory.instructions_executed += 1
 
@@ -124,12 +182,22 @@ class VirtualMachine:
         """
         Запускает выполнение программы.
 
+=======
+        
+        self.memory.instructions_executed += 1
+    
+    def run(self, max_steps: int = 0):
+        """
+        Запускает выполнение программы.
+        
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
         Args:
             max_steps: максимальное количество инструкций для выполнения (0 - без ограничений)
         """
         if not self.memory.program_memory:
             print("Ошибка: программа не загружена")
             return
+<<<<<<< HEAD
 
         self.running = True
         instructions_executed = 0
@@ -137,10 +205,20 @@ class VirtualMachine:
         print(f"\nЗапуск выполнения программы...")
         print(f"Начальный IP: 0x{self.ip:04X}")
 
+=======
+        
+        self.running = True
+        instructions_executed = 0
+        
+        print(f"\nЗапуск выполнения программы...")
+        print(f"Начальный IP: 0x{self.ip:04X}")
+        
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
         while self.running and self.ip < len(self.memory.program_memory):
             try:
                 # Декодируем инструкцию
                 instr = Decoder.decode_instruction(
+<<<<<<< HEAD
                     bytes(self.memory.program_memory),
                     self.ip
                 )
@@ -156,35 +234,71 @@ class VirtualMachine:
                 self.ip += instr.size
                 instructions_executed += 1
 
+=======
+                    bytes(self.memory.program_memory), 
+                    self.ip
+                )
+                
+                # Выводим информацию в режиме отладки
+                if self.debug:
+                    Decoder.print_instruction(instr, self.ip)
+                
+                # Выполняем инструкцию
+                self.execute_instruction(instr)
+                
+                # Переходим к следующей инструкции
+                self.ip += instr.size
+                instructions_executed += 1
+                
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
                 # Проверяем ограничение по шагам
                 if max_steps > 0 and instructions_executed >= max_steps:
                     print(f"\nДостигнут лимит инструкций: {max_steps}")
                     break
+<<<<<<< HEAD
 
                 # Пошаговый режим
                 if self.step_by_step:
                     input("Нажмите Enter для следующей инструкции...")
 
+=======
+                
+                # Пошаговый режим
+                if self.step_by_step:
+                    input("Нажмите Enter для следующей инструкции...")
+                
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
                 # Защита от бесконечного цикла
                 if instructions_executed > self.max_instructions:
                     print(f"\nПревышен лимит инструкций: {self.max_instructions}")
                     break
+<<<<<<< HEAD
 
+=======
+                    
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
             except (ValueError, IndexError) as e:
                 print(f"\nОшибка выполнения инструкции по адресу 0x{self.ip:04X}: {e}")
                 break
             except KeyboardInterrupt:
                 print("\nВыполнение прервано пользователем")
                 break
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
         self.running = False
         print(f"\nВыполнение завершено.")
         print(f"Выполнено инструкций: {instructions_executed}")
         print(f"Финальный IP: 0x{self.ip:04X}")
+<<<<<<< HEAD
 
         # Показываем флаги АЛУ, если нужно
         if self.show_alu_flags:
             print(f"Флаги АЛУ: {self.alu.get_status_string()}")
+=======
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
     
     def dump_memory(self, start_addr: int = 0, end_addr: int = 100, 
                    file_path: str = "memory_dump.xml"):

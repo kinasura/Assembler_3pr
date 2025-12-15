@@ -25,31 +25,52 @@ def main():
                        help='Пошаговый режим выполнения')
     parser.add_argument('--max-steps', type=int, default=0,
                        help='Максимальное количество инструкций для выполнения')
+<<<<<<< HEAD
     parser.add_argument('--show-flags', action='store_true',
                        help='Показывать флаги АЛУ после выполнения команд')
 
     args = parser.parse_args()
 
+=======
+    
+    args = parser.parse_args()
+    
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
     # Проверяем существование файла программы
     program_path = Path(args.program_file)
     if not program_path.exists():
         print(f"Ошибка: файл программы не найден: {args.program_file}")
         sys.exit(1)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
     # Проверяем диапазон адресов
     if args.start_addr < 0:
         print(f"Ошибка: начальный адрес не может быть отрицательным: {args.start_addr}")
         sys.exit(1)
+<<<<<<< HEAD
 
     if args.end_addr < args.start_addr:
         print(f"Ошибка: конечный адрес должен быть >= начального: {args.end_addr} < {args.start_addr}")
         sys.exit(1)
 
+=======
+    
+    if args.end_addr < args.start_addr:
+        print(f"Ошибка: конечный адрес должен быть >= начального: {args.end_addr} < {args.start_addr}")
+        sys.exit(1)
+    
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
     # Создаем и настраиваем виртуальную машину
     vm = VirtualMachine()
     vm.debug = args.debug
     vm.step_by_step = args.step
+<<<<<<< HEAD
     vm.show_alu_flags = args.show_flags
+=======
+>>>>>>> 6d0920bfa9dbf1a9f73e89d6b633ff350341a778
     
     print("=" * 60)
     print("УЧЕБНАЯ ВИРТУАЛЬНАЯ МАШИНА (УВМ) - ИНТЕРПРЕТАТОР")

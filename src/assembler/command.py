@@ -3,7 +3,8 @@
 """
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List
+import struct
 
 
 @dataclass
@@ -64,3 +65,73 @@ class Command:
         elif self.opcode == 214:
             return f"A={self.opcode}, B={self.args[0]}, C={self.args[1]}, D={self.args[2]}"
         return ""
+
+    def get_size(self) -> int:
+        """Возвращает размер команды в байтах."""
+        if self.opcode == 158:
+            return 6
+        elif self.opcode == 17:
+            return 5
+        elif self.opcode == 12:
+            return 3
+        elif self.opcode == 214:
+            return 5
+        return 0
+
+    def encode(self) -> bytes:
+        """Кодирует команду в бинарное представление."""
+        if self.opcode == 158:  # LOAD_CONST - 6 байт
+            # Формат: A (8 бит), B (30 бит), C (5 бит)
+            a = self.opcode & 0xFF
+            b = self.args[0] & 0x3FFFFFFF  # 30 бит
+            c = self.args[1] & 0x1F  # 5 бит
+
+            # Упаковка: (c << 38) | (b << 8) | a
+            value = (c << 38) | (b << 8) | a
+            return value.to_bytes(6, byteorder='little')
+
+        elif self.opcode == 17:  # READ_MEM - 5 байт
+            # Формат: A (8 бит), B (26 бит), C (5 бит)
+            a = self.opcode & 0xFF
+            b = self.args[0] & 0x3FFFFFF  # 26 бит
+            c = self.args[1] & 0x1F  # 5 бит
+
+            # Упаковка: (c << 34) | (b << 8) | a
+            value = (c << 34) | (b << 8) | a
+            return value.to_bytes(5, byteorder='little')
+
+        elif self.opcode == 12:  # WRITE_MEM - 3 байта
+            # Формат: A (8 бит), B (5 бит), C (5 бит)
+            a = self.opcode & 0xFF
+            b = self.args[0] & 0x1F  # 5 бит
+            c = self.args[1] & 0x1F  # 5 бит
+
+            # Упаковка: (c << 13) | (b << 8) | a
+            value = (c << 13) | (b << 8) | a
+            return value.to_bytes(3, byteorder='little')
+
+        elif self.opcode == 214:  # ABS - 5 байт
+            # Формат: A (8 бит), B (16 бит), C (5 бит), D (5 бит)
+            a = self.opcode & 0xFF
+            b = self.args[0] & 0xFFFF  # 16 бит
+            c = self.args[1] & 0x1F  # 5 бит
+            d = self.args[2] & 0x1F  # 5 бит
+
+            # Упаковка: (d << 29) | (c << 24) | (b << 8) | a
+            value = (d << 29) | (c << 24) | (b << 8) | a
+            return value.to_bytes(5, byteorder='little')
+
+        else:
+            raise ValueError(f"Кодирование не поддерживается для кода операции: {self.opcode}")
+
+    def to_hex_string(self) -> str:
+        """Возвращает hex-представление команды."""
+        binary_data = self.encode()
+        hex_bytes = [f"{byte:02x}" for byte in binary_data]
+        return ", ".join(hex_bytes)
+
+    def to_test_format(self) -> str:
+        """Возвращает представление в тестовом формате (как в спецификации)."""
+        binary_data = self.encode()
+        hex_bytes = [f"вх{byte:02X}" for byte in binary_data]
+        return ", ".join(hex_bytes)

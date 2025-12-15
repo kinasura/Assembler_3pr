@@ -11,10 +11,10 @@ if __name__ == '__main__':
     loader = unittest.TestLoader()
     start_dir = 'tests'
     suite = loader.discover(start_dir)
-    
+
     # Запускаем тесты
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
-    
+
     # Возвращаем код выхода в зависимости от результата
     sys.exit(0 if result.wasSuccessful() else 1)

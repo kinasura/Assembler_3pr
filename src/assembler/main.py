@@ -6,6 +6,7 @@ import sys
 import argparse
 from pathlib import Path
 from .parser import Parser
+from .encoder import Encoder
 
 def main():
     """Точка входа ассемблера."""
@@ -17,7 +18,7 @@ def main():
     parser.add_argument('input_file', help='Путь к исходному файлу с текстом программы')
     parser.add_argument('output_file', help='Путь к двоичному файлу-результату')
     parser.add_argument('--test', action='store_true', 
-                       help='Режим тестирования (вывод промежуточного представления)')
+                       help='Режим тестирования (вывод промежуточного представления и байтов)')
     
     args = parser.parse_args()
     
@@ -43,18 +44,32 @@ def main():
                 print(command.to_intermediate_format())
             print("-" * 40)
         
-        # На этом этапе просто сообщаем об успешном парсинге
-        # Генерация машинного кода будет на этапе 2
-        print(f"\nРезультат сохранен в промежуточном представлении")
-        print(f"Двоичный файл будет сгенерирован на этапе 2")
+        # Кодируем команды в бинарный формат
+        encoder = Encoder()
+        binary_data = encoder.encode_commands(commands)
         
-        # Сохраняем промежуточное представление в файл (для отладки)
-        intermediate_file = Path(args.output_file).with_suffix('.intermediate')
-        with open(intermediate_file, 'w', encoding='utf-8') as f:
-            for command in commands:
-                f.write(command.to_intermediate_format() + '\n')
+        # Сохраняем бинарный файл
+        output_path = Path(args.output_file)
+        with open(output_path, 'wb') as f:
+            f.write(binary_data)
         
-        print(f"Промежуточное представление сохранено в: {intermediate_file}")
+        # Выводим информацию о файле
+        file_size = output_path.stat().st_size
+        print(f"\nДвоичный файл создан: {output_path}")
+        print(f"Размер файла: {file_size} байт")
+        
+        # В режиме тестирования выводим байтовое представление
+        if args.test:
+            print("\nБайтовое представление (hex):")
+            print("-" * 40)
+            for i, command in enumerate(commands):
+                print(f"Команда {i+1}: {command.to_hex_string()}")
+            
+            print("\nБайтовое представление (тестовый формат):")
+            print("-" * 40)
+            for i, command in enumerate(commands):
+                print(f"Команда {i+1}: {command.to_test_format()}")
+            print("-" * 40)
         
     except Exception as e:
         print(f"Ошибка ассемблирования: {e}")

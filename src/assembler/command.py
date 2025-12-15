@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from typing import List
 import struct
 
-
 @dataclass
 class Command:
     """Представление команды ассемблера."""
@@ -24,15 +23,18 @@ class Command:
         if self.opcode == 158:  # LOAD_CONST
             if len(self.args) != 2:
                 raise ValueError(f"Команда 158 требует 2 аргумента, получено {len(self.args)}")
-            if self.args[0] < 0 or self.args[0] > 0x3FFFFFFF:  # 30 бит
-                raise ValueError(f"Константа {self.args[0]} выходит за пределы 30 бит")
+            # Константа: 30 бит, знаковая
+            min_val = -0x20000000  # -2^29
+            max_val = 0x1FFFFFFF   # 2^29 - 1
+            if self.args[0] < min_val or self.args[0] > max_val:
+                raise ValueError(f"Константа {self.args[0]} выходит за пределы 30 бит (знаковое)")
             if self.args[1] < 0 or self.args[1] > 31:
                 raise ValueError(f"Адрес регистра {self.args[1]} должен быть в диапазоне 0-31")
 
         elif self.opcode == 17:  # READ_MEM
             if len(self.args) != 2:
                 raise ValueError(f"Команда 17 требует 2 аргумента, получено {len(self.args)}")
-            if self.args[0] < 0 or self.args[0] > 0x3FFFFFF:  # 26 бит
+            if self.args[0] < 0 or self.args[0] > 0x3FFFFFF:  # 26 бит беззнаковое
                 raise ValueError(f"Адрес памяти {self.args[0]} выходит за пределы 26 бит")
             if self.args[1] < 0 or self.args[1] > 31:
                 raise ValueError(f"Адрес регистра {self.args[1]} должен быть в диапазоне 0-31")
@@ -46,8 +48,9 @@ class Command:
         elif self.opcode == 214:  # ABS
             if len(self.args) != 3:
                 raise ValueError(f"Команда 214 требует 3 аргумента, получено {len(self.args)}")
-            if self.args[0] < 0 or self.args[0] > 0xFFFF:  # 16 бит
-                raise ValueError(f"Смещение {self.args[0]} выходит за пределы 16 бит")
+            # Смещение: 16 бит, знаковое
+            if self.args[0] < -32768 or self.args[0] > 32767:  # 16 бит знаковое
+                raise ValueError(f"Смещение {self.args[0]} выходит за пределы 16 бит (знаковое)")
             if not (0 <= self.args[1] <= 31 and 0 <= self.args[2] <= 31):
                 raise ValueError(f"Адреса регистров должны быть в диапазоне 0-31")
 
@@ -81,9 +84,12 @@ class Command:
     def encode(self) -> bytes:
         """Кодирует команду в бинарное представление."""
         if self.opcode == 158:  # LOAD_CONST - 6 байт
-            # Формат: A (8 бит), B (30 бит), C (5 бит)
+            # Формат: A (8 бит), B (30 бит знаковое), C (5 бит)
             a = self.opcode & 0xFF
+
+            # Для отрицательных чисел используем дополнительный код (30 бит)
             b = self.args[0] & 0x3FFFFFFF  # 30 бит
+
             c = self.args[1] & 0x1F  # 5 бит
 
             # Упаковка: (c << 38) | (b << 8) | a
@@ -91,7 +97,7 @@ class Command:
             return value.to_bytes(6, byteorder='little')
 
         elif self.opcode == 17:  # READ_MEM - 5 байт
-            # Формат: A (8 бит), B (26 бит), C (5 бит)
+            # Формат: A (8 бит), B (26 бит беззнаковое), C (5 бит)
             a = self.opcode & 0xFF
             b = self.args[0] & 0x3FFFFFF  # 26 бит
             c = self.args[1] & 0x1F  # 5 бит
@@ -111,9 +117,12 @@ class Command:
             return value.to_bytes(3, byteorder='little')
 
         elif self.opcode == 214:  # ABS - 5 байт
-            # Формат: A (8 бит), B (16 бит), C (5 бит), D (5 бит)
+            # Формат: A (8 бит), B (16 бит знаковое), C (5 бит), D (5 бит)
             a = self.opcode & 0xFF
+
+            # Для отрицательного смещения используем дополнительный код (16 бит)
             b = self.args[0] & 0xFFFF  # 16 бит
+
             c = self.args[1] & 0x1F  # 5 бит
             d = self.args[2] & 0x1F  # 5 бит
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<memory_dump>
+  <system_info>
+    <total_data_memory>2000</total_data_memory>
+    <num_registers>32</num_registers>
+    <instructions_executed>7</instructions_executed>
+    <memory_accesses>6</memory_accesses>
+  </system_info>
+  <registers>
+    <register id="0" value_signed="1000" value_unsigned="1000" value_hex="0x000003E8"/>
+    <register id="1" value_signed="123" value_unsigned="123" value_hex="0x0000007B"/>
+    <register id="2" value_signed="-456" value_unsigned="4294966840" value_hex="0xFFFFFE38"/>
+    <register id="3" value_signed="123" value_unsigned="123" value_hex="0x0000007B"/>
+    <register id="4" value_signed="456" value_unsigned="456" value_hex="0x000001C8"/>
+    <register id="5" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="6" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="7" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="8" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="9" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="10" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="11" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="12" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="13" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="14" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="15" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="16" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="17" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="18" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="19" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="20" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="21" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="22" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="23" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="24" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="25" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="26" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="27" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="28" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="29" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="30" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <register id="31" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+  </registers>
+  <data_memory start_address="990" end_address="1010">
+    <cell address="990" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="991" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="992" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="993" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="994" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="995" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="996" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="997" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="998" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="999" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="1000" value_signed="123" value_unsigned="123" value_hex="0x0000007B"/>
+    <cell address="1001" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="1002" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="1003" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="1004" value_signed="456" value_unsigned="456" value_hex="0x000001C8"/>
+    <cell address="1005" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="1006" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="1007" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="1008" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="1009" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+    <cell address="1010" value_signed="0" value_unsigned="0" value_hex="0x00000000"/>
+  </data_memory>
+</memory_dump>

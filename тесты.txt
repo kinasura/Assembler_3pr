@@ -1,0 +1,12 @@
+python verify_stage4.py
+python run_tests.py
+python run_assembler.py examples/alu_test.asm alu_test.bin
+head -20 memory_dump.xml
+python -c "import os; print(f'Размер файла: {os.path.getsize(\"test.bin\")} байт')"
+echo "Байтовое представление из вывода ассемблера:"
+cat examples/test_all_commands.asm
+python run_assembler.py examples/test_all_commands.asm test.bin --test
+python run_assembler.py examples/alu_test.asm alu_test.bin
+python run_assembler.py examples/test_negative.asm test.bin
+python run_assembler.py examples/test_negative.asm test.bin --test
+python verify_stage3.py
